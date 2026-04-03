@@ -20,16 +20,39 @@ public class PlayerController : MonoBehaviour
     public Animator anim;
     public Transform groundCheck;
 
+
+    [Header("Turn Heading")]
+    public Transform playerCamera;
+    public float mouseSensitivity = 100f;
+    public float minPitch = -90f;
+    public float maxPitch = 90f;
+
     private float currentSpeed;
     private Vector3 movementInput;
+    private float xRotation = 0f;
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         anim=GetComponent<Animator>();
         currentSpeed = speed;
-    }
 
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+    }
+    public void TurnHeading()
+    {   
+        float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
+        float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
+
+        // Vertical look (camera only)
+        xRotation -= mouseY;
+        xRotation = Mathf.Clamp(xRotation, minPitch, maxPitch);
+        playerCamera.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
+
+        // Horizontal look (player body)
+        transform.Rotate(Vector3.up * mouseX);
+    }
     public void Move()
     {
         float moveHorizontal = Input.GetAxis("Horizontal");
@@ -62,7 +85,6 @@ public class PlayerController : MonoBehaviour
             anim.SetTrigger("Jump");
             anim.SetFloat("MoveY", rb.velocity.y);
         }
-        print(rb.velocity.y);
     }
 
     private bool IsGrounded()
@@ -73,6 +95,7 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        TurnHeading();
         Move();
         Jump();
     }
