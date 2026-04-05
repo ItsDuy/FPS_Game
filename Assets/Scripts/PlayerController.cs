@@ -17,7 +17,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("References")]
     public Rigidbody rb;
-    public Animator anim;
+    // public Animator anim;
     public Transform groundCheck;
 
 
@@ -34,7 +34,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        anim=GetComponent<Animator>();
+        // anim=GetComponent<Animator>();
         currentSpeed = speed;
 
         Cursor.lockState = CursorLockMode.Locked;
@@ -58,19 +58,19 @@ public class PlayerController : MonoBehaviour
         float moveHorizontal = Input.GetAxis("Horizontal");
         float moveVertical = Input.GetAxis("Vertical");
         movementInput = new Vector3(moveHorizontal, 0.0f, moveVertical).normalized;
-        anim.SetBool("isMoving", movementInput.magnitude > 0);
+        // anim.SetBool("isMoving", movementInput.magnitude > 0);
 
-        anim.SetFloat("MoveX", moveHorizontal);
-        anim.SetFloat("MoveZ", moveVertical);
+        // anim.SetFloat("MoveX", moveHorizontal);
+        // anim.SetFloat("MoveZ", moveVertical);
         if (Input.GetKey(KeyCode.LeftShift))
         {
             currentSpeed = Mathf.Lerp(currentSpeed, runSpeed, acceleration * Time.deltaTime);
-            anim.SetBool("isRunning", true);
+            // anim.SetBool("isRunning", true);
         }
         else
         {
             currentSpeed = Mathf.Lerp(currentSpeed, speed, deceleration * Time.deltaTime);
-            anim.SetBool("isRunning", false);
+            // anim.SetBool("isRunning", false);
         }
         Vector3 movement =transform.TransformDirection(movementInput) * currentSpeed;
         rb.velocity = new Vector3(movement.x, rb.velocity.y, movement.z);
@@ -82,8 +82,8 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space) && IsGrounded())
         {
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-            anim.SetTrigger("Jump");
-            anim.SetFloat("MoveY", rb.velocity.y);
+            // anim.SetTrigger("Jump");
+            // anim.SetFloat("MoveY", rb.velocity.y);
         }
     }
 
